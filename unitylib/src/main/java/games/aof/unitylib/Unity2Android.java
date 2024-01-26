@@ -4,6 +4,13 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.binance.android.binancepay.api.BinancePay;
+import com.binance.android.binancepay.api.BinancePayException;
+import com.binance.android.binancepay.api.BinancePayFactory;
+import com.binance.android.binancepay.api.BinancePayListener;
+import com.binance.android.binancepay.api.BinancePayParam;
 import com.tokenpocket.opensdk.base.TPListener;
 import com.tokenpocket.opensdk.base.TPManager;
 import com.tokenpocket.opensdk.simple.model.Blockchain;
@@ -118,6 +125,29 @@ public class Unity2Android {
 
                 Log.i("unity", "onCancel: "+s);
                 callUnity("TPCallbackHelper","SignOnCancel", s);
+            }
+        });
+    }
+    public void binPay(String merchantId, String prepayId, Long timeStamp, String nonceStr, String certSn, String sign) {
+
+        BinancePayParam params = new BinancePayParam(merchantId, prepayId, timeStamp.toString(), nonceStr, certSn, sign);
+        BinancePay binancePay = BinancePayFactory.Companion.getBinancePay(getActivity());
+        binancePay.pay(params, new BinancePayListener() {
+            @Override
+            public void onSuccess() {
+                Log.i("unity", "onSuccess: ");
+                callUnity("TPCallbackHelper", "BPayOnSuccess", "");
+            }
+
+            @Override
+            public void onCancel() {
+                callUnity("TPCallbackHelper", "BPayOnError", "");
+            }
+
+            @Override
+            public void onError(@NonNull BinancePayException e) {
+                Log.i("unity", "onError: " + e.getMessage());
+                callUnity("TPCallbackHelper", "BPayOnError", e.getMessage());
             }
         });
     }

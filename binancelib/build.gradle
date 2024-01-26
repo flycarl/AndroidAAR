@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('binance_pay_sdk_v1.1.0.aar'))
