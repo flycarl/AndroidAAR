@@ -16,5 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "AndroidAAR"
 include ':app'
 include ':unitylib'
-include ':tplib'
-include ':binancelib'
+include ':paylib'
