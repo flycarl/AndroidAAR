@@ -85,6 +85,11 @@ public class Unity2Android {
      */
     public void AliPayByApp(final String orderInfo){
         Log.i("Unity", "启动线程");
+        if (orderInfo == null || orderInfo.trim().isEmpty()) {
+            Log.e("Unity", "支付宝支付失败，orderInfo为空");
+            callUnity("BootScope","onALIPayFinish","{'resultStatus':'6001','result':'orderInfo is null','memo':'Failed'}");
+            return;
+        }
         Runnable payRun=new Runnable() {
             @Override
             public void run() {
